@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		60C11632286A6B6E0023B4E1 /* SearchResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60C11631286A6B6E0023B4E1 /* SearchResultsViewController.swift */; };
 		60D9EDB0286602B10086843F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D9EDAF286602B10086843F /* AppDelegate.swift */; };
 		60D9EDB2286602B10086843F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D9EDB1286602B10086843F /* SceneDelegate.swift */; };
 		60D9EDB4286602B10086843F /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D9EDB3286602B10086843F /* MainTabBarViewController.swift */; };
@@ -29,6 +30,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		60C11631286A6B6E0023B4E1 /* SearchResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultsViewController.swift; sourceTree = "<group>"; };
 		60D9EDAC286602B10086843F /* NetflixClone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NetflixClone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		60D9EDAF286602B10086843F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		60D9EDB1286602B10086843F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -63,6 +65,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		60C11633286A6BDA0023B4E1 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				60D9EDC4286608C80086843F /* HomeViewController.swift */,
+				60D9EDC6286608F30086843F /* UpcomingViewController.swift */,
+				60D9EDC8286609250086843F /* SearchViewController.swift */,
+				60D9EDCA2866094B0086843F /* DownloadViewController.swift */,
+				60D9EDB3286602B10086843F /* MainTabBarViewController.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		60C11634286A6C560023B4E1 /* General */ = {
+			isa = PBXGroup;
+			children = (
+				60C11631286A6B6E0023B4E1 /* SearchResultsViewController.swift */,
+			);
+			path = General;
+			sourceTree = "<group>";
+		};
 		60D9EDA3286602B10086843F = {
 			isa = PBXGroup;
 			children = (
@@ -90,7 +112,6 @@
 				60D9EDC3286608B70086843F /* Controllers */,
 				60D9EDAF286602B10086843F /* AppDelegate.swift */,
 				60D9EDB1286602B10086843F /* SceneDelegate.swift */,
-				60D9EDB3286602B10086843F /* MainTabBarViewController.swift */,
 				60D9EDB8286602B20086843F /* Assets.xcassets */,
 				60D9EDBA286602B20086843F /* LaunchScreen.storyboard */,
 				60D9EDBD286602B20086843F /* Info.plist */,
@@ -101,10 +122,8 @@
 		60D9EDC3286608B70086843F /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				60D9EDC4286608C80086843F /* HomeViewController.swift */,
-				60D9EDC6286608F30086843F /* UpcomingViewController.swift */,
-				60D9EDC8286609250086843F /* SearchViewController.swift */,
-				60D9EDCA2866094B0086843F /* DownloadViewController.swift */,
+				60C11634286A6C560023B4E1 /* General */,
+				60C11633286A6BDA0023B4E1 /* Core */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -238,6 +257,7 @@
 				60D9EDD62866ABE40086843F /* HeroHeaderUIView.swift in Sources */,
 				60D9EDB0286602B10086843F /* AppDelegate.swift in Sources */,
 				60D9EDCB2866094B0086843F /* DownloadViewController.swift in Sources */,
+				60C11632286A6B6E0023B4E1 /* SearchResultsViewController.swift in Sources */,
 				60D9EDDC286802730086843F /* Extensions.swift in Sources */,
 				60D9EDB2286602B10086843F /* SceneDelegate.swift in Sources */,
 				60D9EDC7286608F30086843F /* UpcomingViewController.swift in Sources */,
