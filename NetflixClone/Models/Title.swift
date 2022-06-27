@@ -17,6 +17,7 @@ struct Title: Codable {
     let media_type: String?
     let original_language: String?
     let original_title: String?
+    let original_name: String?
     let title: String?
     let poster_path: String?
     let overview: String?
