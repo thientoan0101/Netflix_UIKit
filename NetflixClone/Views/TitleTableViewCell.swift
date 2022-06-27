@@ -24,6 +24,8 @@ class TitleTableViewCell: UITableViewCell {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
+//        label.contentMode = .scaleToFill
+//        label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -31,6 +33,7 @@ class TitleTableViewCell: UITableViewCell {
     private let titlePosterUIImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
