@@ -9,6 +9,7 @@ import UIKit
 
 protocol CollectionViewTableViewCellDelegate: AnyObject {
     func collectionViewTableViewCellDidTabCell(_ cell: CollectionViewTableViewCell, viewModel: TitlePreviewViewModel)
+    func alertDownloadStatus(_ status: String)
 }
 
 class CollectionViewTableViewCell: UITableViewCell {
@@ -59,8 +60,10 @@ class CollectionViewTableViewCell: UITableViewCell {
             switch result {
             case .success():
                 NotificationCenter.default.post(name: NSNotification.Name("downloaded"), object: nil)
+                self.delegate?.alertDownloadStatus("successful")
             case .failure(let error):
                 print(error)
+                self.delegate?.alertDownloadStatus("fail")
             }
         }
     }

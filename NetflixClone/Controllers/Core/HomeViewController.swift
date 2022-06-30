@@ -22,7 +22,12 @@ class HomeViewController: UIViewController {
     
     private var randomTrendingMovie: Title?
     private var headerView: HeroHeaderUIView?
-
+    let downloadAlert: UIAlertController = {
+        let alert = UIAlertController(title: "Download", message: "Successful", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        return alert
+    }()
+    
     let sectionTitles: [String] = ["Trending Movies", "Trending Tv", "Popular", "Upcoming Movie", "Top rated"]
     
     
@@ -194,6 +199,12 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
 }
 
 extension HomeViewController: CollectionViewTableViewCellDelegate {
+    func alertDownloadStatus(_ status: String) {
+        let alert = UIAlertController(title: "Download", message: status, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
     func collectionViewTableViewCellDidTabCell(_ cell: CollectionViewTableViewCell, viewModel: TitlePreviewViewModel) {
         DispatchQueue.main.async { [weak self] in
             let vc = TitlePreviewViewController()
@@ -213,6 +224,7 @@ extension HomeViewController: HeroHeaderUIViewDelegate {
             case .success():
                 NotificationCenter.default.post(name: NSNotification.Name("downloaded"), object: nil)
                 print("download successfully")
+                self.present(self.downloadAlert, animated: true, completion: nil)
             case .failure(let error):
                 print(error.localizedDescription)
             }

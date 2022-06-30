@@ -10,6 +10,8 @@ import WebKit
 
 class TitlePreviewViewController: UIViewController {
 
+    private var model: TitlePreviewViewModel?
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -27,7 +29,7 @@ class TitlePreviewViewController: UIViewController {
         return label
     }()
     
-    private let downloadButton: UIButton = {
+    private lazy var downloadButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .red
@@ -35,6 +37,7 @@ class TitlePreviewViewController: UIViewController {
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 8
         button.layer.masksToBounds = true
+        button.addTarget(self, action: #selector(downloadAction), for: .touchUpInside)
         return button
     }()
     
@@ -44,6 +47,21 @@ class TitlePreviewViewController: UIViewController {
         webView.translatesAutoresizingMaskIntoConstraints = false
         return webView
     }()
+    
+    @objc private func downloadAction() {
+//        DataPersistenceManager.shared.downloadTitleWith(model: Title()!) { result in
+//            switch result {
+//            case .success():
+//                NotificationCenter.default.post(name: NSNotification.Name("downloaded"), object: nil)
+//                print("download successfully")
+//                self.present(self.downloadAlert, animated: true, completion: nil)
+//            case .failure(let error):
+//                print(error.localizedDescription)
+//            }
+//        }
+        
+        
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -93,6 +111,8 @@ class TitlePreviewViewController: UIViewController {
     }
 
     func configure(with model: TitlePreviewViewModel) {
+        self.model = model
+        
         titleLabel.text = model.title
         overviewLabel.text = model.titleOverview
         
