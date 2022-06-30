@@ -7,25 +7,36 @@
 
 import UIKit
 
+protocol HeroHeaderUIViewDelegate: AnyObject {
+    func playButtonHeroAction()
+    func downloadButtonHeroAction()
+}
+
 class HeroHeaderUIView: UIView {
 
-    private let downloadButton: UIButton = {
+    private var contentModel: TitleViewModel?
+    
+    weak var delegate: HeroHeaderUIViewDelegate?
+    
+    private lazy var downloadButton: UIButton = {
         let button = UIButton()
         button.setTitle("Download", for: .normal)
         button.layer.borderColor = UIColor.white.cgColor
         button.layer.borderWidth = 1
         button.layer.cornerRadius = 5
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(downloadButtonAction), for: .touchUpInside)
         return button
     }()
-
-    private let playButton: UIButton = {
+    
+    private lazy var playButton: UIButton = {
         let button = UIButton()
         button.setTitle("Play", for: .normal)
         button.layer.borderColor = UIColor.white.cgColor
         button.layer.borderWidth = 1
         button.layer.cornerRadius = 5
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(playButtonAction), for: .touchUpInside)
         return button
     }()
     
@@ -36,6 +47,14 @@ class HeroHeaderUIView: UIView {
         imageView.image = UIImage(named: "heroImage")
         return imageView
     }()
+    
+    @objc func playButtonAction() {
+        delegate?.playButtonHeroAction()
+    }
+    
+    @objc func downloadButtonAction() {
+        delegate?.downloadButtonHeroAction()
+    }
     
     private func addGradient() {
         let gradientLayer = CAGradientLayer()
@@ -71,6 +90,7 @@ class HeroHeaderUIView: UIView {
     }
     
     public func configure(with model: TitleViewModel) {
+        self.contentModel = model
         guard let url = URL(string: "https://image.tmdb.org/t/p/w500/\(model.posterURL)") else {
             print("parse url fail")
             return

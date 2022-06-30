@@ -45,6 +45,10 @@ class HomeViewController: UIViewController {
         headerView = HeroHeaderUIView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 450))
         homeFeedTable.tableHeaderView = headerView
         configureHeroHeaderView()
+        
+        // add delegate for header
+        headerView?.delegate = self
+    
     }
     
     private func configureHeroHeaderView() {
@@ -54,7 +58,7 @@ class HomeViewController: UIViewController {
             case .success(let titles):
                 let selectedTitle = titles.randomElement()
                 self?.randomTrendingMovie = selectedTitle
-                self?.headerView?.configure(with: TitleViewModel(titleName: selectedTitle?.original_name ?? selectedTitle?.original_title ?? "", posterURL: selectedTitle?.poster_path ?? ""))
+                self?.headerView?.configure(with: TitleViewModel(titleName: selectedTitle?.original_name ?? selectedTitle?.original_title ?? "", posterURL: selectedTitle?.poster_path ?? "", overview: selectedTitle?.overview ?? ""))
                
             case .failure(let error):
                 print(error.localizedDescription)
@@ -197,6 +201,48 @@ extension HomeViewController: CollectionViewTableViewCellDelegate {
             self?.navigationController?.pushViewController(vc, animated: true)
         }
     }
+    
+    
+}
+
+
+extension HomeViewController: HeroHeaderUIViewDelegate {
+    func downloadButtonHeroAction() {
+        DataPersistenceManager.shared.downloadTitleWith(model: self.randomTrendingMovie!) { result in
+            switch result {
+            case .success():
+                NotificationCenter.default.post(name: NSNotification.Name("downloaded"), object: nil)
+                print("download successfully")
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    func playButtonHeroAction() {
+        let title = self.randomTrendingMovie
+        guard let titleName = title?.original_name ?? title?.original_title else {
+            return
+        }
+        
+        APICaller.shared.getMovie(with: titleName + " trailer") { [weak self] result in
+            switch result {
+            case .success(let videoElement):
+                guard let titleOverview = title?.overview else {
+                    return
+                }
+                let viewModel = TitlePreviewViewModel(title: titleName, youtubeView: videoElement, titleOverview: titleOverview)
+                DispatchQueue.main.async { [weak self] in
+                    let vc = TitlePreviewViewController()
+                    vc.configure(with: viewModel)
+                    self?.navigationController?.pushViewController(vc, animated: true)
+                }
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
     
     
 }
