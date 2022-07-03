@@ -22,25 +22,56 @@ enum APIError: Error {
 class APICaller {
     
     static let shared = APICaller()
-
+//    private let session: URLSession
+    private let session: NetworkSession
+    
+    
+    init(session: NetworkSession = URLSession.shared) {
+            self.session = session
+    }
+    
+//    init(session: URLSession = .shared) {
+//        self.session = session
+//        print(session)
+//    }
     
     func getTrendingMovies(completion: @escaping (Result<[Title], Error>) -> Void) {
         guard let url = URL(string: "\(Constant.baseURL)/3/trending/movie/day?api_key=\(Constant.API_KEY)") else { return }
         
-        let task = URLSession.shared.dataTask(with: URLRequest(url: url)) { data, _, error in
+//        let task = URLSession.shared.dataTask(with: URLRequest(url: url)) { data, _, error in
+//            guard let data = data, error == nil else {
+//                return
+//            }
+//
+//            do {
+//                let results = try JSONDecoder().decode(TrendingTitleResponse.self, from: data)
+//                completion(.success(results.results))
+//            } catch {
+//                completion(.failure(APIError.failedToGetData))
+//            }
+//        }
+
+        
+        
+        session.loadData(with: URLRequest(url: url)) { data, _, error in
             guard let data = data, error == nil else {
                 return
             }
+            print("after guard data")
             
+    
             do {
                 let results = try JSONDecoder().decode(TrendingTitleResponse.self, from: data)
+                print("\n\nRESULT NE:\n\(results)\n\nhet result")
                 completion(.success(results.results))
+                let encoded = try JSONEncoder().encode(results)
+                print("\n\n\nencoded:\n\(String(data: encoded, encoding: .utf8)!)\n\nencoded")
             } catch {
                 completion(.failure(APIError.failedToGetData))
             }
         }
         
-        task.resume()
+        //task.resume()
     }
     
     func getTrendingTVs(completion: @escaping (Result<[Title], Error>) -> Void) {
@@ -50,8 +81,10 @@ class APICaller {
             guard let data = data, error == nil else {
                 return
             }
+            print("\n\nData:\n\(data)")
             do {
                 let results = try JSONDecoder().decode(TrendingTitleResponse.self, from: data)
+                print("\n\nResult:\n\(results)")
                 completion(.success(results.results))
             } catch {
                 completion(.failure(APIError.failedToGetData))
@@ -177,4 +210,102 @@ class APICaller {
         
     }
     
+}
+
+
+// MARK: MOCK CLASS FOR UNIT TEST
+
+//// We create a partial mock by subclassing the original class
+//class URLSessionDataTaskMock: URLSessionDataTask {
+//
+//    private let closure: () -> Void
+//
+//    init(closure: @escaping () -> Void)
+//    {
+//        print("closure init")
+//        self.closure = closure
+//    }
+//
+//    // We override the 'resume' method and simply call our closure
+//    // instead of actually resuming any task.
+//    override func resume() {
+//        print("excute resume mock data task")
+//        closure()
+//    }
+//}
+
+//
+//class URLSessionMock: URLSession {
+//
+//    typealias CompletionHandler = (Data?, URLResponse?, Error?) -> Void
+//
+//    // Properties that enable us to set exactly what data or error
+//    // we want our mocked URLSession to return for any request.
+//    var data: Data?
+//    var error: Error?
+//
+//    override func dataTask(with URLRequest: URLRequest, completionHandler: @escaping CompletionHandler) -> URLSessionDataTask {
+//        print("inside datatask mock")
+//        let response =
+//                    """
+//                      [
+//                          {
+//                              "firstName": "Lee",
+//                              "lastName": "Burrows"
+//                          },
+//                          {
+//                              "firstName": "Dolly",
+//                              "lastName": "Burrows"
+//                          }
+//                      ]
+//                      """
+//        let data1 = response.data(using: .utf8)!
+//        let error1 = APIError.failedToGetData
+//        //completionHandler(data1, nil, error1)
+////        Result<AnyObject, Error> result
+////
+//        return URLSessionDataTaskMock {
+//            completionHandler(data1, nil, error1)
+//            //completionHandler(data1, nil, error1)
+//            //return Result<[Title], Er
+//        }
+//
+//    }
+//
+//
+//
+//
+//
+//}
+
+
+
+
+// MARK: MOCK WITH PROTOCOL
+
+protocol NetworkSession {
+    func loadData(with request: URLRequest,
+                  completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void)
+}
+
+extension URLSession: NetworkSession {
+    func loadData(with request: URLRequest,
+                  completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) {
+        let task = dataTask(with: request) { (data, _, error) in
+            completionHandler(data, nil, error)
+        }
+
+        task.resume()
+    }
+}
+
+
+class NetworkSessionMock: NetworkSession {
+    var data: Data?
+    var error: Error?
+
+    func loadData(with request: URLRequest,
+                  completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) {
+        completionHandler(data, nil, error)
+    }
 }
