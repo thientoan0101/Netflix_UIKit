@@ -35,55 +35,299 @@ class NetflixClone_APICallerTests: XCTestCase {
     }
     
     func testApiCallGetTrendingsSuccessful() {
-        // setup our object
-//        let session = URLSessionMock()
-        
         var data2: Data
         do {
             let t1 = Title(id: 1, media_type: "Optional(\"movie\")", original_language: "Optional(\"en\")", original_title: "Naruto", original_name: "nato", title: "naruto", poster_path: "/path", overview: "anime hehe", release_date: "Optional(\"2022-06-15\")", vote_average: 4.5, vote_count: 3)
-            
             let list = TrendingTitleResponse(results: [t1])
-           
-            
             let encodeData = try JSONEncoder().encode(list)
             data2 = encodeData
         } catch {
             data2 = "response".data(using: .utf8)!
         }
-        
-    
-        
-        
-        
+     
         let session = NetworkSessionMock()
         session.data = data2
         let apiCaller = APICaller(session: session)
-        
-        
-        
-        //var rawResult: Result<[Title], Error>?
-//        apiCaller.getTrendingMovies { rawResult in
-//            print("rawResult")
-//        }
-//        print("hehe")
-        //print(rawResult)
-        
         apiCaller.getTrendingMovies { result in
             switch result {
             case .success(let titles):
-                //cell.configure(with: titles)
+                
                 print(titles)
                 XCTAssertEqual(titles.count, 1)
                 print("huhu")
-            case .failure(let error):
-                print("error: " + error.localizedDescription)
-                XCTAssertEqual("\(error.localizedDescription)", "The operation couldn’t be completed. (NetflixClone.APIError error 0.)")
-                print("fail")
+            case .failure(_):
+//                XCTAssertEqual("\(error.localizedDescription)", "The operation couldn’t be completed. (NetflixClone.APIError error 0.)")
+                XCTFail()
             }
         }
+    }
     
-//        XCTAssertEqual(rawResult.success(data), .success(data))
+    func testApiCallGetTrendingsFail() {
+        let session = NetworkSessionMock()
+        session.data = "dummyData".data(using: .utf8)!
+        let apiCaller = APICaller(session: session)
+       
+        apiCaller.getTrendingMovies { result in
+            switch result {
+//            case .success(let titles):
+//                //cell.configure(with: titles)
+//                print(titles)
+//                XCTAssertEqual(titles.count, 1)
+//                print("huhu")
+            case .failure(let error):
+                XCTAssertEqual("\(error.localizedDescription)", "The operation couldn’t be completed. (NetflixClone.APIError error 0.)")
+            case .success(_):
+                XCTFail()
+            }
+        }
+    }
     
+    
+    func testApiCallGetTrendingsTVSuccessful() {
+        var data2: Data
+        do {
+            let t1 = Title(id: 1, media_type: "Optional(\"movie\")", original_language: "Optional(\"en\")", original_title: "Naruto", original_name: "nato", title: "naruto", poster_path: "/path", overview: "anime hehe", release_date: "Optional(\"2022-06-15\")", vote_average: 4.5, vote_count: 3)
+            let list = TrendingTitleResponse(results: [t1])
+            let encodeData = try JSONEncoder().encode(list)
+            data2 = encodeData
+        } catch {
+            data2 = "response".data(using: .utf8)!
+        }
+     
+        let session = NetworkSessionMock()
+        session.data = data2
+        let apiCaller = APICaller(session: session)
+        apiCaller.getTrendingTVs { result in
+            switch result {
+            case .success(let titles):
+                XCTAssertEqual(titles.count, 1)
+            case .failure(_):
+                XCTFail()
+            }
+        }
+    }
+    
+    func testApiCallGetTrendingsTVFail() {
+        let session = NetworkSessionMock()
+        session.data = "dummyData".data(using: .utf8)!
+        let apiCaller = APICaller(session: session)
+       
+        apiCaller.getTrendingTVs { result in
+            switch result {
+            case .failure(let error):
+                XCTAssertEqual("\(error.localizedDescription)", "The operation couldn’t be completed. (NetflixClone.APIError error 0.)")
+            case .success(_):
+                XCTFail()
+            }
+        }
     }
 
+    func testApiCallGetUpcomingSuccessful() {
+        var data2: Data
+        do {
+            let t1 = Title(id: 1, media_type: "Optional(\"movie\")", original_language: "Optional(\"en\")", original_title: "Naruto", original_name: "nato", title: "naruto", poster_path: "/path", overview: "anime hehe", release_date: "Optional(\"2022-06-15\")", vote_average: 4.5, vote_count: 3)
+            let list = TrendingTitleResponse(results: [t1])
+            let encodeData = try JSONEncoder().encode(list)
+            data2 = encodeData
+        } catch {
+            data2 = "response".data(using: .utf8)!
+        }
+     
+        let session = NetworkSessionMock()
+        session.data = data2
+        let apiCaller = APICaller(session: session)
+        apiCaller.getUpcomingMovies { result in
+            switch result {
+            case .success(let titles):
+                XCTAssertEqual(titles.count, 1)
+            case .failure(_):
+                XCTFail()
+            }
+        }
+    }
+    
+    func testApiCallGetUpcomingFail() {
+        let session = NetworkSessionMock()
+        session.data = "dummyData".data(using: .utf8)!
+        let apiCaller = APICaller(session: session)
+       
+        apiCaller.getUpcomingMovies { result in
+            switch result {
+            case .failure(let error):
+                XCTAssertEqual("\(error.localizedDescription)", "The operation couldn’t be completed. (NetflixClone.APIError error 0.)")
+            case .success(_):
+                XCTFail()
+            }
+        }
+    }
+    
+    
+    func testApiCallGetPopularSuccessful() {
+        var data2: Data
+        do {
+            let t1 = Title(id: 1, media_type: "Optional(\"movie\")", original_language: "Optional(\"en\")", original_title: "Naruto", original_name: "nato", title: "naruto", poster_path: "/path", overview: "anime hehe", release_date: "Optional(\"2022-06-15\")", vote_average: 4.5, vote_count: 3)
+            let list = TrendingTitleResponse(results: [t1])
+            let encodeData = try JSONEncoder().encode(list)
+            data2 = encodeData
+        } catch {
+            data2 = "response".data(using: .utf8)!
+        }
+     
+        let session = NetworkSessionMock()
+        session.data = data2
+        let apiCaller = APICaller(session: session)
+        apiCaller.getPopular { result in
+            switch result {
+            case .success(let titles):
+                XCTAssertEqual(titles.count, 1)
+            case .failure(_):
+                XCTFail()
+            }
+        }
+    }
+    
+    func testApiCallGetPopularTVFail() {
+        let session = NetworkSessionMock()
+        session.data = "dummyData".data(using: .utf8)!
+        let apiCaller = APICaller(session: session)
+       
+        apiCaller.getPopular { result in
+            switch result {
+            case .failure(let error):
+                XCTAssertEqual("\(error.localizedDescription)", "The operation couldn’t be completed. (NetflixClone.APIError error 0.)")
+            case .success(_):
+                XCTFail()
+            }
+        }
+    }
+    
+    func testApiCallGetTopRatedSuccessful() {
+        var data2: Data
+        do {
+            let t1 = Title(id: 1, media_type: "Optional(\"movie\")", original_language: "Optional(\"en\")", original_title: "Naruto", original_name: "nato", title: "naruto", poster_path: "/path", overview: "anime hehe", release_date: "Optional(\"2022-06-15\")", vote_average: 4.5, vote_count: 3)
+            let list = TrendingTitleResponse(results: [t1])
+            let encodeData = try JSONEncoder().encode(list)
+            data2 = encodeData
+        } catch {
+            data2 = "response".data(using: .utf8)!
+        }
+     
+        let session = NetworkSessionMock()
+        session.data = data2
+        let apiCaller = APICaller(session: session)
+        apiCaller.getTopRated { result in
+            switch result {
+            case .success(let titles):
+                XCTAssertEqual(titles.count, 1)
+            case .failure(_):
+                XCTFail()
+            }
+        }
+    }
+    
+    func testApiCallGetTopRatedFail() {
+        let session = NetworkSessionMock()
+        session.data = "dummyData".data(using: .utf8)!
+        let apiCaller = APICaller(session: session)
+       
+        apiCaller.getTopRated { result in
+            switch result {
+            case .failure(let error):
+                XCTAssertEqual("\(error.localizedDescription)", "The operation couldn’t be completed. (NetflixClone.APIError error 0.)")
+            case .success(_):
+                XCTFail()
+            }
+        }
+    }
+    
+    func testApiCallGetDiscoverSuccessful() {
+        var data2: Data
+        do {
+            let t1 = Title(id: 1, media_type: "Optional(\"movie\")", original_language: "Optional(\"en\")", original_title: "Naruto", original_name: "nato", title: "naruto", poster_path: "/path", overview: "anime hehe", release_date: "Optional(\"2022-06-15\")", vote_average: 4.5, vote_count: 3)
+            let list = TrendingTitleResponse(results: [t1])
+            let encodeData = try JSONEncoder().encode(list)
+            data2 = encodeData
+        } catch {
+            data2 = "response".data(using: .utf8)!
+        }
+     
+        let session = NetworkSessionMock()
+        session.data = data2
+        let apiCaller = APICaller(session: session)
+        apiCaller.getDiscoverMovies { result in
+            switch result {
+            case .success(let titles):
+                XCTAssertEqual(titles.count, 1)
+            case .failure(_):
+                XCTFail()
+            }
+        }
+    }
+    
+    func testApiCallGetDiscoverFail() {
+        let session = NetworkSessionMock()
+        session.data = "dummyData".data(using: .utf8)!
+        let apiCaller = APICaller(session: session)
+       
+        apiCaller.getDiscoverMovies { result in
+            switch result {
+            case .failure(let error):
+                XCTAssertEqual("\(error.localizedDescription)", "The operation couldn’t be completed. (NetflixClone.APIError error 0.)")
+            case .success(_):
+                XCTFail()
+            }
+        }
+    }
+    
+    func testSearchSuccessful() {
+        var data2: Data
+        do {
+            let t1 = Title(id: 1, media_type: "Optional(\"movie\")", original_language: "Optional(\"en\")", original_title: "Naruto", original_name: "nato", title: "naruto", poster_path: "/path", overview: "anime hehe", release_date: "Optional(\"2022-06-15\")", vote_average: 4.5, vote_count: 3)
+            let list = TrendingTitleResponse(results: [t1])
+            let encodeData = try JSONEncoder().encode(list)
+            data2 = encodeData
+        } catch {
+            data2 = "response".data(using: .utf8)!
+        }
+     
+        let session = NetworkSessionMock()
+        session.data = data2
+        let apiCaller = APICaller(session: session)
+        let query = "naruto"
+        apiCaller.search(with: query) { result in
+            switch result {
+            case .success(let titles):
+                XCTAssertEqual(titles.count, 1)
+            case .failure(_):
+                XCTFail()
+            }
+        }
+    }
+    
+    func testGetYoutubeContent() {
+        var data2: Data
+        do {
+            let idVideoElement = IdVideoElement(kind: "youtube#video", videoId: "TWChnPaRbGU")
+            let videoElement = VideoElement(id: idVideoElement)
+            let youtubeResultSearch = YoutubeSearchResponse(items: [videoElement])
+            
+            let encodeData = try JSONEncoder().encode(youtubeResultSearch)
+            data2 = encodeData
+        } catch {
+            data2 = "response".data(using: .utf8)!
+        }
+     
+        let session = NetworkSessionMock()
+        session.data = data2
+        let apiCaller = APICaller(session: session)
+        let query = "naruto"
+        apiCaller.getMovie(with: query) { result in
+            switch result {
+            case .success(let title):
+                XCTAssertEqual(title.id.videoId, "TWChnPaRbGU")
+            case .failure(_):
+                XCTFail()
+            }
+        }
+    }
 }
